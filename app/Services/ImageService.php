@@ -13,7 +13,7 @@ class ImageService
     public function upload(UploadedFile $file, $folder = 'uploads', $documentable = null, $type = null)
     {
         $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs($folder, $fileName, 'public');
+        $path = $file->storeAs($folder, $fileName, 'public');        
 
         return ImageMaster::create([
             'id' => Str::uuid(),

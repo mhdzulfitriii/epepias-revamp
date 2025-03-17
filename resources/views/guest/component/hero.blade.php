@@ -12,7 +12,7 @@
             </a>
         </div>
         <h1
-            class="max-w-2xl mx-auto text-center font-manrope font-bold text-4xl text-gray-900 mb-5 md:text-5xl leading-[50px]">
+            class="max-w-7xl mx-auto text-center font-manrope font-bold text-4xl text-gray-900 mb-5 md:text-5xl leading-[50px]">
             Sistem Pengurusan Organisasi
             <span class="text-indigo-600">Persatuan Pelajar Islam Selangor Darul Ehsan </span>
         </h1>
@@ -30,3 +30,4 @@
             </svg>
         </a>           
     </div>
+    

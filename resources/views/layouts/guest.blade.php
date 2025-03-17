@@ -7,16 +7,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'E-PEPIAS') }}</title>
-    <meta name="robots" content="noindex">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('MyPKPIM_C.png') }}"> --}}
-    <meta property="og:site_name" content="mypkpim" />        
+    <link rel="icon" type="image/x-icon" href="{{ asset('PEPIAS.png') }}">
+    <meta property="og:site_name" content="epepias" />        
+    <meta property="og:image" content="{{ asset('PEPIAS.png') }} " />
+    <meta name="robots" content="noindex">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <meta property="og:image" content="{{ asset('MyPKPIM.png') }} " />
 
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
 
@@ -24,20 +24,14 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
-<body class="font-sans antialiased">
-
-    {{-- @include('message.staging') --}}
-
-    {{-- <div id="loader">
-        @include('admin.component.loader')
-    </div> --}}
+<body class="font-sans text-gray-900 antialiased ">        
 
     <div id="navbar" class="">
         @include('layouts.nav-guest')
-    </div>
+    </div>           
 
     <div class="">
-        @yield('content')
+        {{$slot}}
     </div>
 
     @if (session('success'))
@@ -86,5 +80,9 @@
         };
     </script>
 </body>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.body.style.zoom = "80%";
+    });
+</script>
 </html>
