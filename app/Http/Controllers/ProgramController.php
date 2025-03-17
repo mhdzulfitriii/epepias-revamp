@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\libPersatuan;
 use App\Models\program;
 use App\Rules\Required;
 use App\Rules\StringField;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramController extends Controller
 {
     public function index()
     {
+        // dd(Auth::id(), Auth::user());
+
         $list = program::all();
         return view('admin.pusat.program.index', compact('list'));
     }
 
     public function create()
     {
-        return view('admin.pusat.program.tambah', ['program'=>new program()]);
+        $persatuan = libPersatuan::all();
+
+        return view('admin.pusat.program.tambah', ['program'=>new program()], compact('persatuan'));
     }
 
 
@@ -36,6 +42,12 @@ class ProgramController extends Controller
             'Mode' => [new Required(), 'string', 'max:50', 'in:Peserta,Penggerak'],
         ]);
 
+        $startDate = date('Y-m-d', strtotime($data['StartDate']));
+        $endDate = date('Y-m-d', strtotime($data['EndDate']));
+
+        $data['StartDate'] = $startDate;
+        $data['EndDate'] = $endDate;
+
         $imageValidate = $request->validate([
             'image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:10240'],
         ]);
@@ -44,20 +56,22 @@ class ProgramController extends Controller
 
         $image = $imageService->upload($request->image, 'program', $program, 'Thumbnail');
 
+        // dd($image);
         $program->update([
             'Image_ID' => $image->id
         ]);
 
         return $program
-            ? redirect()->route('admin.program.idex')->with('success', 'Program berjaya ditambah')
+            ? redirect()->route('pusat.program.index')->with('success', 'Program berjaya ditambah')
             : back()->withErrors('Produk tidak berjaya ditambah');
     }
 
 
     public function edit($id) {
         $program = program::find($id);
+        $persatuan = libPersatuan::all();
 
-        return view('admin.pusat.program.tambah', compact('program'));
+        return view('admin.pusat.program.tambah', compact('program', 'persatuan'));
     }
 
     public function update(Request $request, ImageService $imageService, $id) {
@@ -78,6 +92,12 @@ class ProgramController extends Controller
             'image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:10240'],
         ]);
 
+        $startDate = date('Y-m-d', strtotime($data['StartDate']));
+        $endDate = date('Y-m-d', strtotime($data['EndDate']));
+
+        $data['StartDate'] = $startDate;
+        $data['EndDate'] = $endDate;
+
         $program = program::find($id);
 
         if ($request->hasFile('image')) {
@@ -89,6 +109,6 @@ class ProgramController extends Controller
             $program->update(['Image_ID' => $newImage->id]);
         }
 
-        return redirect()->route('admin.program.index')->with('success', 'Program berjaya dikemaskini');
+        return redirect()->route('pusat.program.index')->with('success', 'Program berjaya dikemaskini');
     }
 }

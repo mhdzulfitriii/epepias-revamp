@@ -15,17 +15,18 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('NamaProgram');
             $table->string('Tempat');
-            $table->uuid('Image_ID');
-            $table->string('Persatuan_ID');
+            $table->uuid('Image_ID')->nullable();
+            $table->string('Persatuan_ID')->nullable();
             $table->date('StartDate');
             $table->date('EndDate')->nullable();
-            $table->boolean('Status')->default(true);
+            $table->enum('Status', ['Aktif', 'Tidak Aktif'])->default("Aktif");
             $table->boolean('MyHadir')->default(false);
             $table->string('JenisProgram');
             $table->string('Majlis');
             $table->string('Link');
             $table->enum('Mode', ['Peserta', 'Penggerak']);
             $table->string('Slug');
+            $table->string('KodProgram');
             $table->timestamps();
         });
     }

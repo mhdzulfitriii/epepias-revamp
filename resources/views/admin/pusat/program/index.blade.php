@@ -115,7 +115,7 @@
                                         </td>
                                         <td class="size-px whitespace-wrap">
                                             <div class="px-6 py-3">
-                                                <span class="text-sm text-gray-600">{{ $item->Title }}</span>
+                                                <span class="text-sm text-gray-600">{{ $item->NamaProgram }}</span>
                                                 {{-- <div class=" font-bold">
                                                     <span class="text-xs text-gray-600"> {{ $item->Desc }}
                                                     </span>
@@ -127,7 +127,7 @@
                                                 <div class="flex items-center gap-x-2">
                                                     <div class="grow">
                                                         <span
-                                                            class="text-sm text-gray-600">{{ $item->Kategori->Kategori }}</span>
+                                                            class="text-sm text-gray-600">{{ $item->Tempat }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,7 +147,9 @@
                                                 <div class="flex items-center gap-x-2">
                                                     <div class="grow">
                                                         <span
-                                                            class="text-sm text-gray-600">{{ $item->price }}</span>
+                                                            class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($item->StartDate)->translatedFormat('j F Y') }} <br> @if($item->EndDate != null && $item->EndDate != $item->StartDate) 
+                                                             {{ \Carbon\Carbon::parse($item->EndDate)->translatedFormat('j F Y') }} 
+                                                        @endif </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,7 +159,7 @@
                                                 <div class="flex items-center gap-x-2">
                                                     <div class="grow">
                                                         <span
-                                                            class="text-sm text-gray-600">{{ $item->stock }}</span>
+                                                            class="text-sm text-gray-600">{{ $item->JenisProgram }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -199,7 +201,7 @@
                                                         aria-labelledby="hs-table-dropdown-1">
                                                         <div class="py-2 first:pt-0 last:pb-0">
                                                             <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
-                                                                href="{{ route('admin.produk.kemaskini', ['id' => $item->id]) }}">
+                                                                href="{{ route('pusat.program.kemaskini', ['id' => $item->id]) }}">
                                                                 Kemaskini
                                                             </a>
                                                         </div>
