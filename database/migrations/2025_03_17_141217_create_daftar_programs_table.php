@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('daftar_programs', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignUuid('Program_ID');
+            $table->foreignUuid('Program_ID')->constrained('programs')->onDelete('cascade');
             $table->string('Persatuan');
             $table->string('NamaPenuh');
             $table->string('NoIC');

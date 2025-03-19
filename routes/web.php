@@ -39,11 +39,13 @@ Route::middleware(['auth:admin', 'admin:Pusat'])->group(function () {
     Route::get('/pusat/logout', [AdminController::class, 'logout'])->name('admin.logout');
     
     Route::get('/pusat/program', [ProgramController::class, 'index'])->name('pusat.program.index');
+    Route::get('/pusat/program/peserta/{id}/{slug}', [ProgramController::class, 'senaraiPeserta'])->name('pusat.program.peserta');
     Route::get('/pusat/program/tambah', [ProgramController::class, 'create'])->name('pusat.program.tambah');
     Route::get('/pusat/program/kemaskini/{id}', [ProgramController::class, 'edit'])->name('pusat.program.kemaskini');
     
     Route::post('/pusat/program/tambah', [ProgramController::class, 'store'])->name('pusat.program.tambah.perform');
     Route::post('/pusat/program/kemaskini/{id}', [ProgramController::class, 'update'])->name('pusat.program.kemaskini.perform');
+    Route::delete('/pusat/program/{id}', [ProgramController::class, 'delete'])->name('pusat.program.delete');
 
     Route::get('/admin/lib/persatuan', [LibPersatuanController::class, 'index'])->name('admin.libpersatuan.index');
     Route::get('/admin/lib/persatuan/tambah', [LibPersatuanController::class, 'tambah'])->name('admin.libpersatuan.tambah');

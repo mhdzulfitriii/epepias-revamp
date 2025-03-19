@@ -28,7 +28,7 @@
                             <div>
                                 <div class="inline-flex gap-x-2">
                                     <a class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                                        href="{{route('pusat.program.tambah')}}">
+                                        href="{{ route('pusat.program.tambah') }}">
                                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24"
                                             height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -107,6 +107,10 @@
 
                             <tbody class="divide-y divide-gray-200">
                                 @foreach ($list as $item)
+                                    <x-delete-confirmation modalId="deleteProgramModal-{{ $loop->iteration }}"
+                                        title="Padam Rekod"
+                                        message="Adakah anda pasti untuk padam rekod program {{ $item->NamaProgram }} ini ?"
+                                        confirmRoute="{{ route('pusat.program.delete', $item->id) }}" />
                                     <tr>
                                         <td class="size-px whitespace-nowrap">
                                             <div class="px-6 py-3">
@@ -126,8 +130,7 @@
                                             <div class="px-6 py-3">
                                                 <div class="flex items-center gap-x-2">
                                                     <div class="grow">
-                                                        <span
-                                                            class="text-sm text-gray-600">{{ $item->Tempat }}</span>
+                                                        <span class="text-sm text-gray-600">{{ $item->Tempat }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,9 +150,12 @@
                                                 <div class="flex items-center gap-x-2">
                                                     <div class="grow">
                                                         <span
-                                                            class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($item->StartDate)->translatedFormat('j F Y') }} <br> @if($item->EndDate != null && $item->EndDate != $item->StartDate) 
-                                                             {{ \Carbon\Carbon::parse($item->EndDate)->translatedFormat('j F Y') }} 
-                                                        @endif </span>
+                                                            class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($item->StartDate)->translatedFormat('j F Y') }}
+                                                            <br>
+                                                            @if ($item->EndDate != null && $item->EndDate != $item->StartDate)
+                                                                {{ \Carbon\Carbon::parse($item->EndDate)->translatedFormat('j F Y') }}
+                                                            @endif
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -174,7 +180,7 @@
                                                         <path
                                                             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                                                     </svg>
-                                                    {{ $item->Status }}                                                    
+                                                    {{ $item->Status }}
                                                 </span>
                                             </div>
                                         </td>
@@ -187,9 +193,10 @@
                                                         class="hs-dropdown-toggle py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm"
                                                         aria-haspopup="menu" aria-expanded="false"
                                                         aria-label="Dropdown">
-                                                        <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24" viewBox="0 0 24 24"
-                                                            fill="none" stroke="currentColor" stroke-width="2"
+                                                        <svg class="shrink-0 size-4"
+                                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2"
                                                             stroke-linecap="round" stroke-linejoin="round">
                                                             <circle cx="12" cy="12" r="1" />
                                                             <circle cx="19" cy="12" r="1" />
@@ -204,12 +211,36 @@
                                                                 href="{{ route('pusat.program.kemaskini', ['id' => $item->id]) }}">
                                                                 Kemaskini
                                                             </a>
+                                                            <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                                                                href="{{ route('pusat.program.peserta', ['id' => $item->id, 'slug' => $item->Slug]) }}">
+                                                                Senarai Peserta
+                                                            </a>
+                                                            <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100"
+                                                                href="{{ route('pusat.program.kemaskini', ['id' => $item->id]) }}">
+                                                                Qr Kehadiran
+                                                            </a>
+                                                        </div>
+                                                        <div class="py-2 first:pt-0 last:pb-0">                                                           
+                                                            <input id="npm-install" type="hidden"
+                                                                class="col-span-6 bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                value="{{ route('guest.view.program', ['slug' => $item->Slug]) }}">
+                                                            <button data-copy-to-clipboard-target="npm-install"
+                                                                class="flex w-full items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-hidden focus:bg-gray-100">
+                                                                Pautan Program
+                                                            </button>
+
+
                                                         </div>
                                                         <div class="py-2 first:pt-0 last:pb-0">
-                                                            <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                                                            {{-- <a class="flex items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500"
                                                                 href="#">
                                                                 Padam
-                                                            </a>
+                                                            </a> --}}
+                                                            <button type="button"
+                                                                class="flex w-full items-center gap-x-3 py-2 px-3 rounded-lg text-sm text-red-600 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500"
+                                                                data-hs-overlay="#deleteProgramModal-{{ $loop->iteration }}">
+                                                                Padam
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -265,4 +296,22 @@
         <!-- End Card -->
     </div>
 
+    <script>
+        window.addEventListener('load', function() {
+            const clipboard = FlowbiteInstances.getInstance('CopyClipboard', 'npm-install');
+            const $defaultMessage = document.getElementById('default-message');
+            const $successMessage = document.getElementById('success-message');
+
+            clipboard.updateOnCopyCallback((clipboard) => {
+                $defaultMessage.classList.add('hidden');
+                $successMessage.classList.remove('hidden');
+
+                // reset to default state
+                setTimeout(() => {
+                    $defaultMessage.classList.remove('hidden');
+                    $successMessage.classList.add('hidden');
+                }, 2000);
+            });
+        })
+    </script>
 </x-admin-layouts>

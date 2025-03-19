@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\daftarProgram;
 use App\Models\libPersatuan;
 use App\Models\program;
 use App\Rules\Required;
@@ -24,7 +25,7 @@ class ProgramController extends Controller
     {
         $persatuan = libPersatuan::all();
 
-        return view('admin.pusat.program.tambah', ['program'=>new program()], compact('persatuan'));
+        return view('admin.pusat.program.tambah', ['program' => new program()], compact('persatuan'));
     }
 
 
@@ -67,14 +68,16 @@ class ProgramController extends Controller
     }
 
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $program = program::find($id);
         $persatuan = libPersatuan::all();
 
         return view('admin.pusat.program.tambah', compact('program', 'persatuan'));
     }
 
-    public function update(Request $request, ImageService $imageService, $id) {
+    public function update(Request $request, ImageService $imageService, $id)
+    {
 
         $data = $request->validate([
             'NamaProgram' => [new Required(), new StringField(), 'max:50'],
@@ -110,5 +113,25 @@ class ProgramController extends Controller
         }
 
         return redirect()->route('pusat.program.index')->with('success', 'Program berjaya dikemaskini');
+    }
+
+    public function delete($id)
+    {
+        $program = Program::find($id);
+
+        if (!$program) {
+            return redirect()->back()->with('error', 'Program tidak dijumpai.');
+        }
+
+        $program->delete(); // This triggers cascade delete if it's set in the migration
+
+        return redirect()->back()->with('success', 'Program berjaya di padam.');
+    }
+
+    public function senaraiPeserta($id, $slug)
+    {
+        $program = program::find($id);
+        $list = daftarProgram::where('Program_ID', $id)->paginate(10);
+        return view('admin.pusat.program.peserta', compact('list', 'program'));
     }
 }
